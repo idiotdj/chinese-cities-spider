@@ -198,13 +198,15 @@ def getVillage(url_list):
     return village
 
 ###########################
+print('>>> Data of 2022')
 ###########################
 #省级信息获取
 pro = getProvince("http://www.stats.gov.cn/sj/tjbz/tjyqhdmhcxhfdm/2022/index.html")
+print('Province num: ', len(pro))
 df_province = pd.DataFrame(pro)
 df_province.info()
 # 信息写入csv文件
-df_province.to_csv('province.csv', sep=',', header=True, index=False)
+df_province.to_csv('province.csv', sep=',', header=True, index=False, encoding='gbk')
 
 # ###########################
 # #市级信息获取
