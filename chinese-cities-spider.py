@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 '''
-@File    :   Urban-and-rural-statistics-spider.py
+@File    :   chinese-cities-spider.py
 @Time    :   2023/03/25 08:15:43
 @Author  :   idiotdj
 @Version :   1.0
@@ -208,27 +208,29 @@ df_province.info()
 # 信息写入csv文件
 df_province.to_csv('province.csv', sep=',', header=True, index=False, encoding='gbk')
 
-# ###########################
-# #市级信息获取
-# city = getCity(df_province['link'])
-# df_city = pd.DataFrame(city)
-# df_city.info()
-# # 信息写入csv文件
-# df_city.to_csv('city.csv', sep=',', header=True, index=False)
+###########################
+# 市级信息获取
+city = getCity(df_province['link'])
+print('City num: ', len(city))
+df_city = pd.DataFrame(city)
+df_city.info()
+# 信息写入csv文件
+df_city.to_csv('city.csv', sep=',', header=True, index=False, encoding='gbk')
+
+###########################
+# 区级信息获取
+county = getCounty(df_city['link'])
+print('City num: ', len(county))
+df_county = pd.DataFrame(county)
+# 排序:由于多线程的关系，数据的顺序已经被打乱，所以这里按照区代码进行“升序”排序。
+df_county_sorted = df_county.sort_values(by = ['code']) #按1列进行升序排序
+df_county_sorted.info()
+# 信息写入csv文件
+df_county_sorted.to_csv('county.csv', sep=',', header=True, index=False, encoding='gbk')
 
 # ###########################
-# #区级信息获取
-# county = getCounty(df_city['link'])
-# df_county = pd.DataFrame(county)
-# # 排序:由于多线程的关系，数据的顺序已经被打乱，所以这里按照区代码进行“升序”排序。
-# df_county_sorted = df_county.sort_values(by = ['code']) #按1列进行升序排序
-# df_county_sorted.info()
-# # 信息写入csv文件
-# df_county_sorted.to_csv('county.csv', sep=',', header=True, index=False)
-
-# ###########################
-# #街道信息获取
-# #中山市、东莞市的特殊处理（他们的链接在df_city中）
+# # 街道信息获取
+# # 中山市、东莞市的特殊处理（他们的链接在df_city中）
 # url_list = list()
 # for url in df_county['link']:
 #     url_list.append(url)
@@ -236,19 +238,21 @@ df_province.to_csv('province.csv', sep=',', header=True, index=False, encoding='
 # for town_link in town_link_list:
 #     url_list.append(town_link)
 # town = getTown(url_list)
+# print('Town num: ', len(town))
 # df_town = pd.DataFrame(town)
 # # 排序:由于多线程的关系，数据的顺序已经被打乱，所以这里按照街道代码进行“升序”排序。
 # df_town_sorted = df_town.sort_values(by = ['code']) #按1列进行升序排序
 # df_town_sorted.info()
 # # 信息写入csv文件
-# df_town_sorted.to_csv('town.csv', sep=',', header=True, index=False)
+# df_town_sorted.to_csv('town.csv', sep=',', header=True, index=False, encoding='gbk')
 
 # ###########################
 # #居委会信息获取
 # village = getVillage(df_town['link'])
+# print('Village num: ', len(village))
 # df_village = pd.DataFrame(village)
 # # 排序:由于多线程的关系，数据的顺序已经被打乱，所以这里按照街道代码进行“升序”排序。
 # df_village_sorted = df_village.sort_values(by = ['code']) #按1列进行升序排序
 # df_village_sorted.info()
 # # 信息写入csv文件
-# df_village_sorted.to_csv('village.csv', sep=',', header=True, index=False)
+# df_village_sorted.to_csv('village.csv', sep=',', header=True, index=False, encoding='gbk')
